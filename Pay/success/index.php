@@ -65,7 +65,7 @@
                     </div>
                 </li>
             </ul>
-            <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="#">
+            <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="https://instagram.com/lagirlvzla">
                     <i class="fab fa-instagram"></i>
             </a>
         </div>
@@ -96,6 +96,22 @@
 
     <script src="../../js/main.min.js"></script>
     <script src="../../js/responsive.js"></script>
+    <script>
+        var formData = new FormData();
+        formData.append('email' , 'info.lagirlvzla@gmail.com');
+        fetch('../../mail/adminmail.php',{
+            method: 'POST',
+            body: formData,
+            cache: 'no-cache'
+        })
+        .then(function(response){
+            return response.json();
+        }).then(function(responseJson){
+            console.log("Mensaje: " + responseJson.msg);
+        }).catch(function(err){
+            console.log("ERROR:::", err);
+        });
+    </script>
 
 </body>
 

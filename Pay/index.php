@@ -3,6 +3,13 @@
     session_start();
     $manager                = new Manager()              ;
     $conn                   = OpenCon()                  ;
+    
+    $arrCurrency = [];
+    $getCurrency_res = $manager -> getCurrency();
+    foreach(OpenCon() -> query($getCurrency_res) as $currency){
+        array_push($arrCurrency, $currency);
+    }
+
     if(empty($_SESSION['cart'])){
         header('location:../');
     }
@@ -17,6 +24,7 @@
 
 <head>
     <title>Pagar</title>
+    <link rel="icon" href="../uploads/iconLAGirl.png" type = "image/x-icon"> 
     <!-- Required meta tags always come first -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -66,7 +74,7 @@
                     </div>
                 </li>
             </ul>
-            <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand text-white" href="#">
+            <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand text-white" href="https://instagram.com/lagirlvzla">
                     <i class="fab fa-instagram"></i>
             </a>
         </div>
@@ -105,6 +113,16 @@
                                 <span>Total (USD)</span>
                                 <strong id="total-item-price"></strong>
                             </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <?php
+                                   $output ="";
+                                   foreach($arrCurrency as $currency){
+                                        $output .='<span>Tasa de Cambio ('.$currency['nombre'].')</span>
+                                        <strong id="total-item-price-currency">'.number_format($currency['currency'], 2, ',', '.').'</strong>';
+                                    }
+                                    echo $output;
+                                ?>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-8 order-md-1">
@@ -113,11 +131,47 @@
                             <p>Debes realizar el pago de tus productos a cualquiera de las siguientes cuentas <b>ANTES</b> de rellenar el formulario:</p>
                             <ul>
                                 <li>
-                                    <b>Zelle: </b>
+                                    <b>BANESCO: </b>
                                     <br>
-                                    <i style="font-size:10pt"><b>Nombre:</b> VM WEB</i>
+                                    <i style="font-size:10pt"><b>Nombre:</b> Exclusividades nobux ca</i>
                                     <br>
-                                    <i style="font-size:10pt"><b>E-Mail:</b> info@vmweb.com</i>
+                                    <i style="font-size:10pt"><b>RIF:</b> J407007181</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nro. De Cuenta:</b> 0134-0073-3407-3106-9866</i>
+                                </li>
+                                <li>
+                                    <b>MERCANTIL: </b>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nombre:</b> Lucas Soto</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>C.I:</b> 20.834.227</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nro. De Cuenta:</b> 0105 0280 25 1280059621</i>
+                                </li>
+                                <li>
+                                    <b>BOD: </b>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nombre:</b> Exclusividades Nobux C.A</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>RIF:</b> J-407007181</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nro. De Cuenta:</b> 0116 0101 42 0025347713</i>
+                                </li>
+                                <li>
+                                    <b>PROVINCIAL: </b>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nombre:</b> Andrea Briceño</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>C.I:</b> 24.253.798</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nro. De Cuenta:</b> 01080116860100286883</i>
+                                </li>
+                                <li>
+                                    <b>ZELLE: </b>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Nombre:</b> Andrea Briceno</i>
+                                    <br>
+                                    <i style="font-size:10pt"><b>Email:</b> info.lagirlvzla@gmail.com</i>
                                 </li>
                             </ul>
                         </div>

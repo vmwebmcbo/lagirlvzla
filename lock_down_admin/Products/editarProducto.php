@@ -1,6 +1,8 @@
 <?php
     include '../../php/comManager.php';
+    include '../errHandler.php'                        ;
     $manager  = new Manager();
+    $errHandler           = new ErrorHandler()         ;
     $conn  = OpenCon()       ;
     //Session Permissions
     session_start()          ;
@@ -17,6 +19,13 @@
       $idProducto  = $_POST['idp'];
     }else{
       header('location:tables.php?err=2');
+    }
+    //Consolidation of actions.
+    if(isset($_GET['succ'])){
+      $errHandler -> succHandler($_GET['succ']);
+    }
+    if(isset($_GET['err'])){
+      $errHandler -> errHandler($_GET['err']);
     }
     //Connection
     if($conn){
@@ -45,7 +54,8 @@
                                                  $_POST['precio'         ],
                                                  $producto['imagen'      ],
                                                  $_POST['pos_pagina'     ],
-                                                 $_POST['id_categoria'   ]);
+                                                 $_POST['id_categoria'   ],
+                                                 $_POST['mostrar'        ]);
             if($result == true)
                 header('location:tables.php?succ=5');
             else
@@ -56,7 +66,7 @@
             $imgSize   = $_FILES['image']['size'];
             //Checking format and size of the image
             if( $imgType == 'image/jpeg' && $imgSize < 2000000 ){
-              $uploadfld = $_SERVER['DOCUMENT_ROOT'].'/lagirl/uploads/';
+              $uploadfld = $_SERVER['DOCUMENT_ROOT'].'comManager/lagirl/uploads/';
               if(move_uploaded_file($_FILES['image']['tmp_name'], $uploadfld.$imgNombre)){
                 $result = $manager -> updateProducto($_POST['idp'            ],
                                                      $_POST['nombre'         ],
@@ -64,7 +74,8 @@
                                                      $_POST['precio'         ],
                                                      'uploads/'.$imgNombre    ,
                                                      $_POST['pos_pagina'     ],
-                                                     $_POST['id_categoria'   ]);
+                                                     $_POST['id_categoria'   ],
+                                                     $_POST['mostrar'        ]);
 
                 if($result == true)
                   header('location:tables.php?succ=5');
@@ -82,7 +93,7 @@
 
 
       //Insert Product Tone
-      if( isset($_POST['producto_tono']) ){
+      if( isset($_POST['producto_tono']) && isset($_POST['mostrarInsert']) ){
         if(isset($_FILES['imageTone'])){
           //Tratado de la Imagen.
           if($_FILES['imageTone']['name'] != ''){
@@ -92,11 +103,12 @@
             $imgSizeTone   = $_FILES['imageTone']['size'];
             //Checking the size of the pic
             if($imgTypeTone == 'image/jpeg' && $imgSizeTone < 2000000 ){
-              $uploadfld = $_SERVER['DOCUMENT_ROOT'].'/lagirl/uploads/tonos/';
+              $uploadfld = $_SERVER['DOCUMENT_ROOT'].'comManager/lagirl/uploads/tonos/';
               if(move_uploaded_file($_FILES['imageTone']['tmp_name'], $uploadfld.$imgNombreTone)){
                 $result = $manager -> insertTonoProducto($_POST['producto_tono']        ,
                                                          'uploads/tonos/'.$imgNombreTone, 
-                                                         $_POST['idp']
+                                                         $_POST['idp'],
+                                                         $_POST['mostrarInsert']
                                                         );
 
                 if($result == true)
@@ -112,48 +124,60 @@
       }//if isset the data to database tipo_producto
 
       //Edit Tone Product
-      if( isset($_POST['producto_tonoEdit']) && isset($_POST['id_tproducto'])){
-        if(isset($_FILES['imageToneEdit'])){
-          //Tratado de la Imagen.
-          if($_FILES['imageToneEdit']['name'] == ''){
-            //Aqui va lo de Edit
-            $getSomeTonoProduct = $manager -> getSomeTonoProducto($_POST['id_tproducto']);
-            foreach($conn -> query($getSomeTonoProduct) as $tProductoEdit){
-              $imagenTonoEdit = $tProductoEdit['imagen_color'];
-            }
-            $result = $manager -> updateTonoProducto($_POST['producto_tonoEdit'],
-                                                         $imagenTonoEdit, 
-                                                         $_POST['idp'],
-                                                         $_POST['id_tproducto']
-                                                        );
-            if($result == true)
-              header('location:editarProducto.php?idp='.$_POST['idp']);
-            else
-              header('location:editarProducto.php?idp='.$_POST['idp'].'&err=15');
+      if( isset($_POST['producto_tonoEdit']) && isset($_POST['mostrarEdit']) && isset($_POST['id_tproducto'])){
+        // Delete Tone Product
+        if(isset($_POST['delete'])){
+          $result = $manager -> deleteTonoProducto($_POST['id_tproducto']);
+          if($result){
+            header('location: editarProducto.php?idp='.$idProducto.'&succ=9');
           }else{
-            $imgNombreToneEdit = $_FILES['imageToneEdit']['name'];
-            $imgTypeToneEdit   = $_FILES['imageToneEdit']['type'];
-            $imgSizeToneEdit   = $_FILES['imageToneEdit']['size'];
-            //Checking the size of the pic
-            if($imgTypeToneEdit == 'image/jpeg' && $imgSizeToneEdit < 2000000 ){
-              $uploadfld = $_SERVER['DOCUMENT_ROOT'].'/lagirl/uploads/tonos/';
-              if(move_uploaded_file($_FILES['imageToneEdit']['tmp_name'], $uploadfld.$imgNombreToneEdit)){
-                $result = $manager -> updateTonoProducto($_POST['producto_tonoEdit'],
-                                                         'uploads/tonos/'.$imgNombreToneEdit, 
-                                                         $_POST['idp'],
-                                                         $_POST['id_tproducto']
-                                                        );
-
-                if($result == true)
-                  header('location:editarProducto.php?idp='.$_POST['idp']);
-                else
-                  header('location:editarProducto.php?idp='.$_POST['idp'].'&err=15');
-              }else{
-                header('location:tables.php?err=0');
-              }//move_uploaded_file
-            }//Final Moving Pic
-          }//Final else if imgname = ''
-        }//if img isset
+            header('location: editarProducto.php?idp='.$idProducto.'&err=17');
+          }
+        }else{
+          if(isset($_FILES['imageToneEdit'])){
+            //Tratado de la Imagen.
+            if($_FILES['imageToneEdit']['name'] == ''){
+              //Aqui va lo de Edit
+              $getSomeTonoProduct = $manager -> getSomeTonoProducto($_POST['id_tproducto']);
+              foreach($conn -> query($getSomeTonoProduct) as $tProductoEdit){
+                $imagenTonoEdit = $tProductoEdit['imagen_color'];
+              }
+              $result = $manager -> updateTonoProducto($_POST['producto_tonoEdit'],
+                                                           $imagenTonoEdit, 
+                                                           $_POST['idp'],
+                                                           $_POST['id_tproducto'],
+                                                           $_POST['mostrarEdit' ]
+                                                          );
+              if($result == true)
+                header('location:editarProducto.php?idp='.$_POST['idp']);
+              else
+                header('location:editarProducto.php?idp='.$_POST['idp'].'&err=15');
+            }else{
+              $imgNombreToneEdit = $_FILES['imageToneEdit']['name'];
+              $imgTypeToneEdit   = $_FILES['imageToneEdit']['type'];
+              $imgSizeToneEdit   = $_FILES['imageToneEdit']['size'];
+              //Checking the size of the pic
+              if($imgTypeToneEdit == 'image/jpeg' && $imgSizeToneEdit < 2000000 ){
+                $uploadfld = $_SERVER['DOCUMENT_ROOT'].'comManager/lagirl/uploads/tonos/';
+                if(move_uploaded_file($_FILES['imageToneEdit']['tmp_name'], $uploadfld.$imgNombreToneEdit)){
+                  $result = $manager -> updateTonoProducto($_POST['producto_tonoEdit'],
+                                                           'uploads/tonos/'.$imgNombreToneEdit, 
+                                                           $_POST['idp'],
+                                                           $_POST['id_tproducto'],
+                                                           $_POST['mostrarEdit' ]
+                                                          );
+  
+                  if($result == true)
+                    header('location:editarProducto.php?idp='.$_POST['idp']);
+                  else
+                    header('location:editarProducto.php?idp='.$_POST['idp'].'&err=15');
+                }else{
+                  header('location:tables.php?err=0');
+                }//move_uploaded_file
+              }//Final Moving Pic
+            }//Final else if imgname = ''
+          }//if img isset
+        }
       }//if isset the data to database tipo_producto
     
     }else{
@@ -164,9 +188,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head><meta charset="gb18030">
 
-  <meta charset="utf-8">
+  
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -199,7 +223,7 @@
         <div class="sidebar-brand-icon">
           <i class="fas fa-sliders-h"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">Administración</div>
+        <div class="sidebar-brand-text mx-2">Administraci��n</div>
       </a>
 
       <!-- Heading -->
@@ -273,7 +297,7 @@
                               <label>Nombre</label>
                               <input required type="text" class="form-control" id='nombre' name="nombre" value="<?php echo $producto['nombre'] ?>">
                               <small style="background-color: rgb(194, 194, 194); color:#636363;padding-top:.5%; padding-bottom:.5%; padding-left:.5%; padding-right:.5%; border-radius: 5px;" >
-                              <i class="fas fa-info-circle"></i>Máximo (33) caracteres
+                              <i class="fas fa-info-circle"></i>M��ximo (33) caracteres
                               </small>
                             </div>
                             <div class="col-md-2 col-12">
@@ -320,6 +344,24 @@
                                 ?>
                               </select>
                             </div>
+                            <div class="col-md-3 col-12">
+                              <label>Mostrar</label>
+                              <select class="form-control" required id="precio"  name="mostrar">
+                                <?php
+                                  if($producto['mostrar'] == 1){
+                                    echo '
+                                    <option value="1" selected>Mostrar</option>
+                                    <option value="0">No Mostrar </option>
+                                    ';
+                                  }else{
+                                    echo '
+                                    <option value="1">Mostrar</option>
+                                    <option value="0" selected>No Mostrar </option>
+                                    ';
+                                  }
+                                ?>
+                              </select>
+                            </div>
                           </div>
                           <br>
                           <div class="row bg-white" style="border: #c2c2c2 2px solid; padding-top: 2%; padding: 2%; margin-bottom: 2%; border-radius: 15px;">
@@ -336,7 +378,7 @@
                                     $outTono ='';
                                     foreach($conn->query($getTonoProducto) as $tProducto){
                                       $outTono .='
-                                      <div class="card col-2 pt-2 mr-2 shadow" style="cursor: pointer;" onclick="openModalEdit(\''.$tProducto['id_tproducto'].'\',\''.$tProducto['imagen_color'].'\',\''.$tProducto['nombre'].'\',\''.$tProducto['id_producto'].'\')">
+                                      <div class="card col-2 pt-2 mr-2 shadow" style="cursor: pointer;" onclick="openModalEdit(\''.$tProducto['id_tproducto'].'\',\''.$tProducto['imagen_color'].'\',\''.$tProducto['nombre'].'\',\''.$tProducto['id_producto'].'\', \''.$tProducto['mostrar'].'\')">
                                         <img src="../../'.$tProducto['imagen_color'].'" class="card-img-top">
                                         <div class="card-body">
                                           <p class="card-text">'.$tProducto['nombre'].'</p>
@@ -386,9 +428,15 @@
                     <label>Nombre</label>
                     <input type="text" id="producto_tonoEdit" name="producto_tonoEdit" class="form-control">
                     <br>
+                    <label for="mostrarEdit">Mostrar</label>
+                    <select class="form-control" name="mostrarEdit" id="mostrarEdit">
+                      <!-- Options inserted by JS -->
+                    </select>
+                    <br>
                     <!-- id_tproduct -->
                     <input type="hidden" name="id_tproducto" id="id_tproducto">
-                    <button type="submit" id="insertarTonoButton" class="btn btn-success"><i class="fas fa-plus-circle"></i> Insertar</button>
+                    <button type="submit" id="insertarTonoButton" class="btn btn-success"><i class="fas fa-plus-circle"></i> Editar</button>
+                    <button type="submit" name="delete" id="insertarTonoButton" class="btn btn-danger"><i class="fas fa-plus-circle"></i> Eliminar</button>
                   </form>  
               </div>
               <div class="modal-footer">
@@ -422,7 +470,12 @@
                     <label>Nombre</label>
                     <input type="text" id="producto_tono" name="producto_tono" class="form-control">
                     <br>
-                    
+                    <label for="mostrarEdit">Mostrar</label>
+                    <select class="form-control" name="mostrarInsert" id="mostrarInsert">
+                      <option value="1" selected>Mostrar</option>
+                      <option value="0">No Mostrar</option>
+                    </select>
+                    <br>
                     <button type="submit" id="insertarTonoButton" class="btn btn-success"><i class="fas fa-plus-circle"></i> Insertar</button>
                   </form>  
               </div>
@@ -480,6 +533,7 @@
   <script>
     var imgProductToneEdit = document.getElementById('imgProductToneEdit');
     var producto_tonoEdit  = document.getElementById('producto_tonoEdit');
+    var mostrarEdit        = document.getElementById('mostrarEdit');
     var id_tproducto        = document.getElementById('id_tproducto');
     
     if(imgProductToneEdit.src.length <= 0){
@@ -500,12 +554,24 @@
     var openModalProduct = () =>{
       $('#modalCenter').modal('show');
     }
-    function openModalEdit(_id_tproducto, _imagen_color, _nombre, _id_producto){
+    function openModalEdit(_id_tproducto, _imagen_color, _nombre, _id_producto, _mostrar){
       $('#modalEdit').modal('show');
       imgProductToneEdit.src = '../../'+_imagen_color;
       producto_tonoEdit.value    = _nombre;
       id_tproducto.value = _id_tproducto;
-
+      
+      //Creation of options for "MOSTRAR"
+      if(_mostrar == 1){
+          mostrarEdit.innerHTML = `
+            <option value="1" selected>Mostrar</option>
+            <option value="0">No Mostrar</option>
+          `;
+      }else{
+        mostrarEdit.innerHTML = `
+            <option value="1">Mostrar</option>
+            <option value="0" selected>No Mostrar</option>
+          `;
+      }
     }
   </script>
   <script>

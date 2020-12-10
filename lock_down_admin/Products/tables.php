@@ -30,9 +30,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head><meta charset="gb18030">
 
-  <meta charset="utf-8">
+  
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -65,7 +65,7 @@
         <div class="sidebar-brand-icon">
           <i class="fas fa-sliders-h"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">Administraci贸n</div>
+        <div class="sidebar-brand-text mx-2">Administración</div>
       </a>
 
       <!-- Heading -->
@@ -174,6 +174,12 @@
                                           }else{
                                             $output .='<p class="orderTag"> <i class="fas fa-sort-numeric-down"></i> <b>Producto Destacado: </b>No</p>';
                                           }
+
+                                          if($producto['mostrar']){
+                                            $output .= '<p class="orderTag"> <i class="fas fa-sort-numeric-down"></i> <b>Mostrar: </b> Si</p>';
+                                          }else{
+                                            $output .= '<p class="orderTag"> <i class="fas fa-sort-numeric-down"></i> <b>Mostrar: </b>No</p>';
+                                          }
                                           $output .= '
                                       </div>
                                       <a href="editarProducto.php?idp='.$producto['id_producto'].'" class="btn btn-light"><i class="far fa-edit"></i> Editar</a>
@@ -191,7 +197,7 @@
               </div>
               <div id="no-item-exist-msg" class="displayNone managerStyleNoItemMsg">
                 <img src="../../uploads/noproducts.svg" id="no-products-category-image"/>
-                <p>隆No existen Productos en esta categoria Aun!</p>
+                <p>¡No existen Productos en esta categoria Aun!</p>
               </div>
             </div>
           </div>

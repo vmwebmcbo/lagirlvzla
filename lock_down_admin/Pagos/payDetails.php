@@ -44,8 +44,9 @@ $conn  = OpenCon()    ;
         isset($_POST['nombre_pay']) &&
         isset($_POST['referencia']) &&
         isset($_POST['metodo_pago']) &&
-        isset($_POST['estado'])
-      ){
+        isset($_POST['estado']) &&
+        isset($_POST['currency'])
+        ){
         if($conn){
           $result = $manager -> updatePay(
                                           $idPay,
@@ -56,7 +57,8 @@ $conn  = OpenCon()    ;
                                           $_POST['nombre_pay'],
                                           $_POST['referencia'],
                                           $_POST['metodo_pago'],
-                                          $_POST['estado']
+                                          $_POST['estado'],
+                                          $_POST['currency']
                                         );
             if($result)
               header('location:./?succ=8');
@@ -68,9 +70,9 @@ $conn  = OpenCon()    ;
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head><meta charset="gb18030">
 
-  <meta charset="utf-8">
+  
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -100,7 +102,7 @@ $conn  = OpenCon()    ;
         <div class="sidebar-brand-icon">
           <i class="fas fa-sliders-h"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">Administraci√≥n</div>
+        <div class="sidebar-brand-text mx-2">Administraci®Æn</div>
       </a>
 
       <!-- Heading -->
@@ -224,6 +226,11 @@ $conn  = OpenCon()    ;
                                     ?>
                                 </select>
                             </div>
+                            <div class="col-md-6 col-12 mb-2">
+                              <label style="font-weight: bolder;">Tasa de Cambio en BS al momento de la transaccion</label>
+                              <input type="text" class="form-control" name="currency" value="<?php echo number_format($pay['currency'], 2, '.', ',') ?>">
+                            </div>
+                            
                             
                             <!-- Productos -->
                             <div class="col-md-10 col-12">

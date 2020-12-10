@@ -26,6 +26,12 @@
                 case 8:
                   echo '<script> alert("Su pago ha sido editado con exito")</script>';
                 break;
+                case 9:
+                  echo '<script> alert("El tono ha sido eliminado")</script>';
+                break;
+                case 10:
+                  echo '<script> alert("La tasa de cambio ha sido modificada con exito")</script>';
+                break;
                 default:
                   echo '<script> alert("Ocurrio un Error inesperado")</script>';
                   break;
@@ -80,6 +86,12 @@
                 break;
                 case 16:
                   return '<script> alert(Ocurrio un error al editar el pago) </script>';
+                break;
+                case 17:
+                  return '<script> alert(Ocurrio un error al eliminar el tono) </script>';
+                break;
+                case 18:
+                  return '<script> alert(Ocurrio un error modificar la tasa de cambio) </script>';
                 break;
                 default:
                   echo '<script> alert("Ocurrio un Error inesperado")</script>';

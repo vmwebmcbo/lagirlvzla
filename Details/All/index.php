@@ -4,7 +4,7 @@
     $manager                = new Manager()              ;
     $conn                   = OpenCon()                  ;
     if($conn == true){
-      $getAllProducts_res     = $manager->getProducts()    ;
+      $getAllProducts_res     = $manager->getProductsEnExistencia()    ;
       $getAllCategories_res   = $manager->getCategorias()  ;
       $getAllSubCat_res     = $manager -> getSubCategorias();
       if(isset($_GET['idc'])){
@@ -69,7 +69,7 @@
                         </li>
                     </ul>
                     <!-- Icons -->
-                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand text-white" href="#">
+                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand text-white" href="https://instagram.com/lagirlvzla">
                             <i class="fab fa-instagram"></i>
                     </a>
                 </div>

@@ -39,10 +39,10 @@
           <tr>
             <td style="width:25%"><img id="product-image'.$values['idp'].'" class="product-image-cart" src="../'.$values['pImage'].'"/></td>
             <td style="width:40%" id="product-name'.$values['idp'].'" class="product-name">            
-              <input type="number" name="productoQuantity" class="product-quantity" id="product-quantity" min="1" max="10" disabled  value="'.$values['pQ'].'"><br> '.$values['pName'].'
-              <div class="cart-tone-div">
+              <input type="number" name="productoQuantity" class="product-quantity" id="product-quantity" min="1" max="10" disabled  value="'.$values['pQ'].'"><br> '.$values['pName'].' ('.$values['tProductName'].')
+              <!--<div class="cart-tone-div">
                 <img id="product-tone-image'.$values['tProductID'].'" src="../'.$values['tProductImage'].'" width="100%"/>
-              </div>
+              </div>-->
               <!--<div class="quantity-div">
                 <input type="number" name="productoQuantity" class="product-quantity" id="product-quantity" min="1" max="10" disabled  value="'.$values['pQ'].'"></input>
               </div>-->

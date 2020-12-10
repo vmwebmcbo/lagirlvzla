@@ -68,7 +68,7 @@
                         </li>
                     </ul>
                     <!-- Icons -->
-                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="#">
+                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="https://instagram.com/lagirlvzla">
                             <i class="fab fa-instagram"></i>
                     </a>
                 </div>

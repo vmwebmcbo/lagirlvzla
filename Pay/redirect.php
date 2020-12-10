@@ -1,6 +1,11 @@
 <?php
     include '../php/comManager.php';
     $manager                = new Manager();
+    $arrCurrency = [];
+    $getCurrency_res = $manager -> getCurrency();
+    foreach(OpenCon() -> query($getCurrency_res) as $currency){
+        array_push($arrCurrency, $currency);
+    }
     if(isset($_POST['msg']) == 'success'){
         $nombre_cli   = $_POST['firstName'].' '.$_POST['lastName'];
         $email_cli    = $_POST['email'        ];
@@ -9,6 +14,7 @@
         $titularNombre= $_POST['titularNombre'];
         $referencia   = $_POST['referencia'   ];
         $method       = $_POST['method'       ];
+        // $currency     = $_POST['currency'     ];
         //Products
         $products     = json_decode($_POST['products']);
         $pFormatted   = '';
@@ -22,10 +28,10 @@
         date_default_timezone_set("America/Caracas");
         $date = date('d/m/Y') .' ['. date('h:i').']';
         //Saving the information of payment in the DB
-        $loadPayment  = $manager -> loadPay($nombre_cli, $email_cli, $telefono_cli, $direccion_cli, $titularNombre, $referencia, $method, $pFormatted, $total, $date, $estado);
+        $loadPayment  = $manager -> loadPay($nombre_cli, $email_cli, $telefono_cli, $direccion_cli, $titularNombre, $referencia, $method, $pFormatted, $total, $date, $estado, $arrCurrency[0]['currency']);
         //Check if pay successfully loaded
         if($loadPayment){
-            $redirect = '../mail/success-mail.php?firstName='.$nombre_cli.'&lastName= &email='.$email_cli.'&telefono='.$telefono_cli.'&titularNombre='.$titularNombre.'&referencia='.$referencia.'&products='.$_POST['products'].'&total='.$total.'&date='.$date;
+            $redirect = '../mail/enviarmail.php?firstName='.$nombre_cli.'&lastName= &email='.$email_cli.'&telefono='.$telefono_cli.'&titularNombre='.$titularNombre.'&referencia='.$referencia.'&products='.$_POST['products'].'&total='.$total.'&date='.$date;
         }else{
             $redirect = '../';
         }

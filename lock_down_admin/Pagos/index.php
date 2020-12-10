@@ -4,10 +4,15 @@
     $conn        = new Manager           (); //Manager Instance
     $errHandler  = new ErrorHandler      (); //ErrorHandler Instance
     $arrPagos    = [];
+    $arrCurrency = [];
     if($conn){
       $getArrPagos_res = $conn -> getPayments(); //GetCategorias (query);
+      $getCurrency_res = $conn -> getCurrency();
       foreach(OpenCon() -> query($getArrPagos_res) as $pago){
         array_push($arrPagos, $pago);
+      }
+      foreach(OpenCon() -> query($getCurrency_res) as $currency){
+        array_push($arrCurrency, $currency);
       }
     }else{
       header('location:../index.php?err=0');
@@ -27,6 +32,16 @@
       if(isset($_GET['err'])){
         $errHandler -> errHandler($_GET['err']);
       }
+
+    // Cambio tasa de moneda
+    if(isset($_POST['currency'])){
+      $conn -> updateCurrency($_POST['currency']);
+      if($conn){
+        header('location: index.php?succ=10');
+      }else{
+        header('location: index.php?err=18');
+      }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -120,6 +135,25 @@
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Pagos</h1>
           <p class="mb-4">Este es un resumen de pagos</p>
+
+          <!-- Tasa de Cambio -->
+          <h2>Tasa de Cambio</h2>
+          <?php 
+            $output ='';
+            foreach($arrCurrency as $currency){
+              $output .= '<form action="index.php" method="POST">
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">'.$currency['nombre'].'</span>
+                              </div>
+                              <input type="text" class="form-control col-3" name="currency" placeholder="'.number_format($currency['currency'], 2, '.', ',').'" >
+                              <button type="submit" class="btn-success" style="border: 0;">Cambiar</button>
+                            </div>
+                          </form>';
+            }
+            echo $output;
+          ?>
+          
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">

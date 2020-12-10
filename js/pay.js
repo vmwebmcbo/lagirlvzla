@@ -100,6 +100,7 @@ var confirmPayment = () =>{
         if(firstName.value && lastName.value && email.value && telefono.value && titularNombre.value && referencia.value && products && total)
         {
           var msg = 'success';
+        //   var priceCurrency     = document.getElementById('total-item-price-currency');
           formData.append('firstName'    , firstName.value    );
           formData.append('lastName'     , lastName.value     );
           formData.append('email'        , email.value        );
@@ -111,6 +112,7 @@ var confirmPayment = () =>{
           formData.append('products'     , JSON.stringify(Object.assign({}, products)));
           formData.append('msg'          , msg  );
           formData.append('total'        , total);
+        //   formData.append('currency'     , priceCurrency.innerHTML.replaceAll('.', '').replace(',','.'));
         }else
         {
           var msg = 'error';

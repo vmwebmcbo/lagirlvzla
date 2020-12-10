@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boton Enviar</title>
+</head>
+<body>
+    <button onclick="enviarCorreo()">Enviar Correo</button>
+<script>
+    var formData = new FormData();
+    formData.append('firstName' , 'Juan');
+    formData.append('lastName' , 'Alvarez');
+    formData.append('email' , 'juanjalvarezm571@gmail.com');
+    formData.append('telefono', '+58 4246740043');
+    formData.append('titularNombre','Juan Alvarez');
+    formData.append('referencia','12345678');
+    formData.append('total','15');
+    var enviarCorreo = () => {
+        fetch('http://lagirlvzla.com/mail/enviarmail.php', {
+            method: 'GET',
+            body: formData
+        })
+        .then(function(response){
+            return response.json();
+        }).then(function(responseJson){
+            console.log("Mensaje: " + responseJson.msg);
+        }).catch(function(err){
+            console.log("ERROR:::", err);
+        });
+    } 
+</script>
+</body>
+</html>

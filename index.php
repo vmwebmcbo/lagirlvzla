@@ -4,7 +4,7 @@
     $manager                = new Manager()              ;
     $conn                   = OpenCon()                  ;
     if($conn == true){
-      $getAllProducts_res     = $manager -> getProducts()      ;
+      $getAllProducts_res     = $manager -> getProductsEnExistencia()      ;
       $getAllCategories_res   = $manager -> getCategorias()    ;
       $getImagenInicio_res    = $manager -> getImagenesInicio();
     }else{
@@ -57,13 +57,13 @@
                                 <?php
                                     foreach ($conn->query($getAllCategories_res) as $categoria)
                                     {
-                                        echo '<a id="navBarBootstrap" class="dropdown-item text-white" href="Details/All/?idc='.$categoria['id_categoria'].'">' . $categoria['nombre'] . '</a>';
+                                        echo '<a id="navBarBootstrapDropDown" class="dropdown-item text-white" href="Details/All/?idc='.$categoria['id_categoria'].'">' . $categoria['nombre'] . '</a>';
                                     }
                                 ?>
                             </div>
                         </li>
                     </ul>
-                    <a  style="font-size: 20pt; color:#343a5f; " class="navbar-brand text-white" href="https://instagram.com/vm_web">
+                    <a  style="font-size: 20pt; color:#343a5f; " class="navbar-brand text-white" href="https://instagram.com/lagirlvzla">
                             <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -132,10 +132,12 @@
             <div id="Categorias" class="row justify-content-center mt-4 mb-4">
                 <h3 style="font-weight: 700">CATEGORIAS</h3>
             </div>
-            <div class="collections-container">
+            <div class="collections-container" id="first-cats">
               <?php
+                  $countCat = 0;
                   foreach ($conn->query($getAllCategories_res) as $categoria)
                   {
+                    if($countCat < 4){
                       echo '
                       <a href="Details/All/?idc='.$categoria['id_categoria'].'">
                         <div class="collection">
@@ -143,8 +145,33 @@
                           <p class="collection-title">'.$categoria['nombre'].'</p>
                         </div>
                       </a>';
+                    }
+                    $countCat++;
                   }
               ?>
+            </div>
+            <?php 
+              if($countCat >= 4){
+                echo '
+                <div id="view-all-cats-div" onclick="showAllCats()">
+                  Ver Todas las Categorias <i class="fas fa-angle-down"></i>
+                </div>
+                ';
+              }
+            ?>
+            <div id="all-cats-div" class="collections-container">
+                  <?php 
+                    foreach ($conn->query($getAllCategories_res) as $categoria)
+                    {
+                      echo '
+                      <a href="Details/All/?idc='.$categoria['id_categoria'].'">
+                        <div class="collection">
+                          <img class="collection-image" loading="lazy" src="'.$categoria['imagen_categoria'].'" alt="">
+                          <p class="collection-title">'.$categoria['nombre'].'</p>
+                        </div>
+                      </a>';
+                    }
+                  ?>
             </div>
             <!--Categorias-->
 
@@ -189,13 +216,16 @@
             <!--Productos Desctacados-->
 
             <!-- Sobre Nosotros -->
-           <div class="row mt-5 sobreNosotros-container" style="background-color: #ec008c">
-             <div class="col-12" id="sobreNosotros">
-                  Sobre Nosotros
-             </div>
-             <div class="col-12" id="sobreNosotrosDescrip">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque labore cumque alias deleniti molestiae ducimus sunt velit minus dolorem beatae? Atque voluptate expedita voluptates tempore sint iure consectetur voluptatibus dolorem.
-             </div>
+           <!--<div class="row mt-5 sobreNosotros-container" style="background-color: #ec008c">-->
+           <!--  <div class="col-12" id="sobreNosotros">-->
+           <!--       Sobre Nosotros-->
+           <!--  </div>-->
+           <!--  <div class="col-12" id="sobreNosotrosDescrip">-->
+           <!--         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque labore cumque alias deleniti molestiae ducimus sunt velit minus dolorem beatae? Atque voluptate expedita voluptates tempore sint iure consectetur voluptatibus dolorem.-->
+           <!--  </div>-->
+           <!-- </div>-->
+           <!-- SobreNosotros-->
+            <div class="row mt-5 sobreNosotros-container">
              <div id="Contacto" class="col-sm-6 contact-la-container">
                <img src="uploads/logoLAGirl.png" class="logo-contact" alt="">
               <div class="input-contact">
@@ -220,7 +250,7 @@
                   <a style="color: #fff;font-size: 16pt" href="#Categorias">Categorias</a>
                 </li>
                 <li>
-                    <a  style="font-size: 20pt; color:#fff; " class="navbar-brand" href="#">
+                    <a  style="font-size: 20pt; color:#fff; " class="navbar-brand" href="https://instagram.com/lagirlvzla">
                             <i class="fab fa-instagram"></i>
                     </a>
                     <a id="shoppingCart" class="navbar-brand text-white" href="Cart/">
@@ -232,9 +262,9 @@
                   <!-- Content -->
                   <h5 class="text-uppercase" style="color: #bdbdbd;">Contactanos!</h5>
                   <h6 style="margin: 0; color: #bfbfbf; font-size: 14pt"><i class="fas fa-envelope"></i> Correo Electrónico</h6>
-                  <p><a href="mailto:lagirlvzla@gmail.com" style="color: #828282;">lagirlvzla@gmail.com</a></p>
+                  <p><a href="mailto:info.lagirlvzla@gmail.com" style="color: #828282;">info.lagirlvzla@gmail.com</a></p>
                   <h6 style="margin: 0; color: #bfbfbf;font-size: 14pt"><i class="fas fa-phone-alt"></i> Teléfonos</h6>
-                  <p><a href="tel:+5804146869358" style="color: #828282;">+58 0414-6869358</a></p>
+                  <p><a href="tel:+5804146869358" style="color: #828282;">+58 0412-6642094</a></p>
                 </li>
               </ul>
             </div>
@@ -262,6 +292,16 @@
         }).catch(function(err){
             window.location.reload();
         });
+    </script>
+    <script>
+      var firstCats   = document.getElementById('first-cats');
+      var viewAllCats = document.getElementById('view-all-cats-div');
+      var allCats     = document.getElementById('all-cats-div');
+      var showAllCats = () => {
+        firstCats.style.display = 'none';
+        viewAllCats.style.display = 'none';
+        allCats.style.display = 'grid';
+      }
     </script>
 </body>
 

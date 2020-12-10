@@ -1,0 +1,2 @@
+[01-Dec-2020 09:26:35 America/Boise] PHP Warning:  get_object_vars() expects parameter 1 to be object, null given in /home2/lagirlvz/public_html/mail/enviarmail.php on line 64
+[01-Dec-2020 09:39:43 America/Boise] PHP Warning:  get_object_vars() expects parameter 1 to be object, null given in /home2/lagirlvz/public_html/mail/enviarmail.php on line 64

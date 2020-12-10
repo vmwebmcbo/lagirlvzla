@@ -15,7 +15,7 @@
       $getAllCategories_res  = $manager->getCategorias();    //Get Categories
       $getProducto = $manager -> getProducto($idProducto)   ;//Get the specific product in table products
       $producto    = $getProducto -> fetch(PDO::FETCH_ASSOC);//Fetching the Product searched
-      $getTonoProducto  = $manager -> getTonoProducto($idProducto); //Fetching ProductTones
+      $getTonoProducto  = $manager -> getTonoProductoEnExistencia($idProducto); //Fetching ProductTones
       if ($producto != true) {                               //check if this is a valid product
         header('location:../');
       }
@@ -25,10 +25,11 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head><meta charset="euc-jp">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $producto['nombre'] ?></title>
+    <link rel="icon" href="../uploads/iconLAGirl.png" type = "image/x-icon"> 
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/main.min.css">
@@ -77,7 +78,7 @@
                         </li>
                     </ul>
                     <!-- Icons -->
-                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="#">
+                    <a id="" style="font-size: 20pt; color:#fff; " class="navbar-brand" href="https://instagram.com/lagirlvzla">
                             <i class="fab fa-instagram"></i>
                     </a>
                 </div>
@@ -106,7 +107,7 @@
                           $outTone = '';
                           foreach($conn -> query($getTonoProducto) as $tProducto){
                             $outTone .= '
-                              <div class="div-tone col-1 pl-1 pr-1 toneSelect" id="idtp'.$tProducto['id_tproducto'].'" onclick="selectedTone(\''.$tProducto['id_tproducto'].'\', \''.$tProducto['nombre'].'\', \''.$tProducto['imagen_color'].'\', \'idtp'.$tProducto['id_tproducto'].'\')">
+                              <div class="div-tone col-sm-2 col-3 pl-1 pr-1 toneSelect" id="idtp'.$tProducto['id_tproducto'].'" onclick="selectedTone(\''.$tProducto['id_tproducto'].'\', \''.$tProducto['nombre'].'\', \''.$tProducto['imagen_color'].'\', \'idtp'.$tProducto['id_tproducto'].'\')">
                                   <div class="div-tone-img" width="100%">
                                     <img src="../'.$tProducto['imagen_color'].'" width="100%">
                                   </div>
@@ -167,6 +168,15 @@
       var selectedTone = (_id_tproducto, _nombre, _imagen_color, _idtp) => {
         tProductArray.length = 0;
         var toneSelect = document.getElementsByClassName('toneSelect');
+        var productImagePrincipal = document.getElementById('product-image');
+        console.log(_imagen_color);
+        if(_imagen_color.includes('https://lagirlvzla.com')){
+            _imagen_color = _imagen_color.replace('https://lagirlvzla.com/', '');
+        }
+        //Change image on select to the specified tone
+        productImagePrincipal.src = '../'+_imagen_color;
+        
+        console.log(productImagePrincipal.src);
         for(let i = 0; i < toneSelect.length; i++){
           toneSelect[i].style.border = "none";
         }
@@ -183,21 +193,22 @@
         };
         tProductArray.push(tProductObj);
       }
-      var checkToneSelected = () => {
-        if(tProductArray.length == 0){
-          $('#toast2').toast('show');
-        }
-      }
 
       //Regular Product Without tones
       var divTones = document.getElementById('div-tones-container');
       if(divTones.children.length == 0){
+        var productImagePrincipal = document.getElementById('product-image');
         var divToneChild = document.createElement('div');
         divToneChild.id = 'idtp0';
         divTones.appendChild(divToneChild);
-        selectedTone('0', 'Regular', 'none', 'idtp0');
+        selectedTone('0', 'Regular', productImagePrincipal.src,'idtp0');
       }
 
+        var checkToneSelected = () => {
+            if(tProductArray.length == 0){
+              $('#toast2').toast('show');
+            }
+          }
     </script>
     <script type="text/javascript">
       var pQ = document.querySelector('#product-quantity');

@@ -6,8 +6,8 @@
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
 }
-#navBarBootstrap{
-  color: #343a5f;
+#navBarBootstrapDropDown:hover{
+  color: #000000 !important;
 }
 #wrapperIndex{
   display : block ;
@@ -682,6 +682,39 @@ box-shadow: 0px 1px 8px 1px rgba(0,0,0,0.75);
 .cart-tone-div{
     width:10%;
     padding-top:1%;
+}
+#btn-see-all-products{
+  width: 30%;
+  border: 1px #aaaaaa solid;
+  margin-left: 35%;
+  text-align: center;
+  color: #000;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-top: 2%;
+  cursor: pointer;
+}
+#btn-see-all-products:hover{
+  transition: ease border 800ms;
+  border: 1px #000 solid;
+}
+#all-cats-div{
+  display: none;
+}
+#view-all-cats-div{
+  width: 30%;
+  border: 1px #aaaaaa solid;
+  margin-left: 35%;
+  text-align: center;
+  color: #000;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-top: 2%;
+  cursor: pointer;
+}
+#view-all-cats-div:hover{
+  transition: ease border 800ms;
+  border: 1px #000 solid;
 }
 /*Responsive*/
 @media screen and (max-width: 991px){
