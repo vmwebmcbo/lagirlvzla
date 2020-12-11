@@ -350,5 +350,31 @@
             $stmt  -> execute(array($_id_pago));
             return $stmt;
         }
+        // Delivery
+        function insertDelivery($_delivery_descri, $_delivery_precio){
+            $query = 'INSERT INTO   delivery(delivery_descri,delivery_precio) VALUES (?,?)';
+            $stmt  = OpenCon() -> prepare($query);
+            $stmt -> execute(array($_delivery_descri, $_delivery_precio));
+            return $stmt;
+        }
+        function getDeliveryZones(){
+            $query = "SELECT * FROM delivery";
+            return $query;
+        }
+        function deleteDelivery($_id_delivery){
+            $query = 'DELETE FROM delivery WHERE id_delivery = ?';
+            $stmt  = OpenCon() -> prepare($query);
+            $stmt  -> execute(array($_id_delivery));
+            return $stmt;
+        }
+        function updateDelivery($_id_delivery, $_delivery_descri, $_delivery_precio){
+            $query = 'UPDATE delivery SET
+                        delivery_descri = ?,
+                        delivery_precio = ?
+                        WHERE id_delivery = ?';
+            $stmt = OpenCon() -> prepare($query);
+            $stmt -> execute(array($_delivery_descri, $_delivery_precio, $_id_delivery));
+            return $stmt;
+        }
     }
 ?>

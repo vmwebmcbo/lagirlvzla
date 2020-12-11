@@ -65,7 +65,7 @@
         <div class="sidebar-brand-icon">
           <i class="fas fa-sliders-h"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">Administración</div>
+        <div class="sidebar-brand-text mx-2">Administraci锟斤拷n</div>
       </a>
 
       <!-- Heading -->
@@ -110,6 +110,12 @@
                 <span>Pagos</span>
             </a>
       </li>
+      <li class="nav-item">
+            <a class="nav-link collapsed" href="../Delivery/">
+            <i class="fas fa-box-open"></i>
+                <span>Delivery</span>
+            </a>
+        </li>
     </ul>
     <!-- End of Sidebar -->
 
@@ -197,7 +203,7 @@
               </div>
               <div id="no-item-exist-msg" class="displayNone managerStyleNoItemMsg">
                 <img src="../../uploads/noproducts.svg" id="no-products-category-image"/>
-                <p>¡No existen Productos en esta categoria Aun!</p>
+                <p>锟�0锟�3No existen Productos en esta categoria Aun!</p>
               </div>
             </div>
           </div>

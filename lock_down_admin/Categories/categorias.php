@@ -106,6 +106,12 @@
                 <span>Pagos</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="../Delivery/">
+            <i class="fas fa-box-open"></i>
+                <span>Delivery</span>
+            </a>
+        </li>
     </ul>
     <!-- End of Sidebar -->
 
